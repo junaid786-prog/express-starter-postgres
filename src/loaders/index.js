@@ -1,7 +1,7 @@
-const startDatabase = require('./mongoose');
 const startExpress = require('./express');
 const logger = require('../config/logger');
 const CONFIG = require('../config/config');
+const startDatabase = require('./sequelize');
 
 const startApp = async () => {
     try {

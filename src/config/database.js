@@ -1,54 +1,40 @@
-const mongoose = require('mongoose');
-const logger = require('./logger');
-const CONFIG = require('./config');
+const { Sequelize } = require('sequelize');
+require('dotenv').config();
 
-/**
- * Database connection configuration
- */
-const dbConfig = {
-    // Connection options
-    options: {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-        autoIndex: CONFIG.NODE_ENV !== 'production', // Build indexes in development but not in production
-    },
-
-    /**
-     * Connect to MongoDB
-     * @returns {Promise<mongoose.Connection>}
-     */
-    connect: async () => {
-        try {
-            const uri = CONFIG.MONGODB_URI;
-
-            // Set up MongoDB connection events
-            mongoose.connection.on('connected', () => {
-                logger.info('MongoDB connected successfully');
-            });
-
-            mongoose.connection.on('error', (err) => {
-                logger.error(`MongoDB connection error: ${err}`);
-            });
-
-            mongoose.connection.on('disconnected', () => {
-                logger.info('MongoDB disconnected');
-            });
-
-            // Handle Node.js process termination
-            process.on('SIGINT', async () => {
-                await mongoose.connection.close();
-                logger.info('MongoDB connection closed due to app termination');
-                process.exit(0);
-            });
-
-            // Connect to MongoDB
-            await mongoose.connect(uri, dbConfig.options);
-            return mongoose.connection;
-        } catch (error) {
-            logger.error(`Error connecting to MongoDB: ${error.message}`);
-            throw error;
+const sequelize = new Sequelize(
+    process.env.DB_NAME,
+    process.env.DB_USER,
+    process.env.DB_PASSWORD,
+    {
+        host: process.env.DB_HOST,
+        port: process.env.DB_PORT,
+        dialect: 'postgres',
+        logging: process.env.NODE_ENV === 'development' ? console.log : false,
+        pool: {
+            max: 10,
+            min: 0,
+            acquire: 30000,
+            idle: 10000
+        },
+        define: {
+            timestamps: true,
+            underscored: true,
+            freezeTableName: true
         }
+    }
+);
+
+const testConnection = async () => {
+    try {
+        await sequelize.authenticate();
+        console.log('Connection to database has been established successfully.');
+    } catch (error) {
+        console.error('Unable to connect to the database:', error);
+        process.exit(1);
     }
 };
 
-module.exports = dbConfig;
+module.exports = {
+    sequelize,
+    testConnection
+};
