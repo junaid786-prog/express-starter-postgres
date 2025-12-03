@@ -106,61 +106,6 @@ docker-compose logs postgres         # View logs
 docker-compose down                  # Stop services
 ```
 
-### Models
-
-- **Booking**: Service booking management (planned)
-- **Event**: Event tracking and analytics
-
-## 🌐 API Endpoints
-
-### Bookings
-
-- `POST /api/bookings` - Create new booking
-- `GET /api/bookings/:id` - Get booking details
-
-### Events
-
-- `POST /api/events` - Track custom event
-- `GET /api/events` - List all events
-- `GET /api/events/stats` - Event statistics
-
-### Health
-
-- `GET /health` - Health check
-
-## 🔧 Environment Variables
-
-Required environment variables (see `.env.example`):
-
-```bash
-# Server
-NODE_ENV=development
-PORT=3000
-
-# Database
-DB_HOST=localhost
-DB_PORT=5432
-DB_NAME=a1_garage_dev
-DB_USER=postgres
-DB_PASSWORD=password
-
-# Database Pool
-DB_POOL_MIN=2
-DB_POOL_MAX=10
-DB_POOL_IDLE=10000
-DB_POOL_ACQUIRE=60000
-
-# Security (for future admin features if needed)
-# JWT_SECRET=your-secret-key
-# JWT_EXPIRES_IN=7d
-
-# External APIs
-SERVICETITAN_API_KEY=your-api-key
-SERVICETITAN_TENANT_ID=your-tenant-id
-GA4_MEASUREMENT_ID=your-ga4-id
-GA4_API_SECRET=your-ga4-secret
-```
-
 ## 📊 Development Workflow
 
 ### Adding New Features
@@ -186,39 +131,6 @@ GA4_API_SECRET=your-ga4-secret
 - **Input Validation**: Joi schema validation
 - **SQL Injection Prevention**: Sequelize parameterized queries
 - **Password Hashing**: bcrypt with salt rounds
-
-## 🔄 Planned Integrations
-
-### ServiceTitan API
-
-- Job creation and management
-- Customer synchronization
-- Schedule management
-
-### Scheduling Pro API
-
-- Available time slots
-- Appointment booking
-- Calendar integration
-
-### Klaviyo API
-
-- Email notifications
-- Customer segmentation
-- Marketing automation
-
-### SMS Provider
-
-- Booking confirmations
-- Appointment reminders
-- Status updates
-
-### Analytics
-
-- Google Analytics 4
-- Meta Pixel
-- Google Ads conversion tracking
-- VWO A/B testing
 
 ## 🐳 Docker Setup
 
